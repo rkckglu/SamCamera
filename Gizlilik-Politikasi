@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>SAM GPS Map Camera — Gizlilik Politikası</title>
+<meta name="description" content="SAM GPS Map Camera gizlilik politikası. Verileriniz cihazınızda kalır." />
+
+<style>
+  :root {
+    color-scheme: light dark;
+
+    --zemin:        #F4F7FA;
+    --kart:         #FFFFFF;
+    --kart-ust:     #EDF2F7;
+    --metin:        #16232E;
+    --metin-orta:   #4A5C6B;
+    --metin-soluk:  #76889A;
+    --cizgi:        #DDE5EC;
+    --mavi:         #1063AE;
+    --mavi-acik:    #2E8BD8;
+    --mavi-zemin:   #E7F0F9;
+    --yesil:        #1F7A5C;
+    --yesil-zemin:  #E3F3EC;
+    --amber:        #9A6208;
+    --amber-zemin:  #FBF0DC;
+
+    --olcu:  1.5rem;
+    --yuvar: 10px;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  :root[data-tema="koyu"] {
+    --zemin:        #0C141C;
+    --kart:         #131F2A;
+    --kart-ust:     #1A2A38;
+    --metin:        #E6EDF3;
+    --metin-orta:   #A8BAC9;
+    --metin-soluk:  #6E8496;
+    --cizgi:        #233443;
+    --mavi:         #4FA3E3;
+    --mavi-acik:    #7CC0F0;
+    --mavi-zemin:   #16293C;
+    --yesil:        #5FD1A6;
+    --yesil-zemin:  #122C25;
+    --amber:        #E0B061;
+    --amber-zemin:  #2C2416;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-padding-top: 88px; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--zemin);
+    color: var(--metin);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Ust cubuk ---------- */
+  .ust {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--zemin) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cizgi);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .ust-ic {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0.75rem var(--olcu);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .marka {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-right: auto;
+    min-width: 0;
+  }
+  .marka-simge {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(145deg, #1B4C8C, #1673C4);
+    display: grid; place-items: center;
+    flex: none;
+  }
+  .marka-simge svg { width: 20px; height: 20px; }
+  .marka-ad {
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .marka-alt {
+    display: block;
+    font-weight: 500;
+    font-size: 0.72rem;
+    color: var(--metin-soluk);
+  }
+
+  .dugmeler { display: flex; gap: 0.4rem; flex: none; }
+  .dugme {
+    appearance: none;
+    border: 1px solid var(--cizgi);
+    background: var(--kart);
+    color: var(--metin-orta);
+    border-radius: 8px;
+    padding: 0.42rem 0.7rem;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .dugme:hover { border-color: var(--mavi); color: var(--mavi); }
+  .dugme:focus-visible { outline: 2px solid var(--mavi); outline-offset: 2px; }
+  .dugme svg { width: 15px; height: 15px; }
+
+  /* ---------- Govde duzeni ---------- */
+  .sayfa {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 var(--olcu) 5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 62rem) {
+    .sayfa {
+      grid-template-columns: 15rem 1fr;
+      align-items: start;
+      gap: 3.5rem;
+    }
+    .icindekiler { position: sticky; top: 5.5rem; }
+  }
+
+  /* ---------- Baslik ---------- */
+  .kapak {
+    grid-column: 1 / -1;
+    padding: 3.25rem 0 2rem;
+    border-bottom: 1px solid var(--cizgi);
+    margin-bottom: 0.5rem;
+  }
+  .kapak h1 {
+    margin: 0 0 0.6rem;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    font-weight: 750;
+  }
+  .kapak p {
+    margin: 0;
+    max-width: 44rem;
+    color: var(--metin-orta);
+    font-size: 1.05rem;
+  }
+  .tarih {
+    display: inline-block;
+    margin-top: 1.1rem;
+    font-size: 0.82rem;
+    color: var(--metin-soluk);
+    border: 1px solid var(--cizgi);
+    border-radius: 99px;
+    padding: 0.22rem 0.75rem;
+  }
+
+  /* ---------- Ozet seridi ---------- */
+  .ozet {
+    display: grid;
+    gap: 0.7rem;
+    margin: 2rem 0 0;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 40rem) {
+    .ozet { grid-template-columns: repeat(3, 1fr); }
+  }
+  .ozet-kart {
+    background: var(--yesil-zemin);
+    border: 1px solid color-mix(in srgb, var(--yesil) 24%, transparent);
+    border-radius: var(--yuvar);
+    padding: 0.9rem 1rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .ozet-kart svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--yesil); }
+  .ozet-kart b { display: block; font-size: 0.9rem; color: var(--metin); }
+  .ozet-kart span { font-size: 0.82rem; color: var(--metin-orta); line-height: 1.5; }
+
+  /* ---------- Icindekiler ---------- */
+  .icindekiler h2 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--metin-soluk);
+    margin: 0 0 0.75rem;
+    letter-spacing: 0.02em;
+  }
+  .icindekiler ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--cizgi);
+  }
+  .icindekiler a {
+    display: block;
+    padding: 0.36rem 0 0.36rem 0.9rem;
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    color: var(--metin-orta);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .icindekiler a:hover { color: var(--mavi); }
+  .icindekiler a.etkin {
+    color: var(--mavi);
+    border-left-color: var(--mavi);
+    font-weight: 650;
+  }
+  .icindekiler a:focus-visible { outline: 2px solid var(--mavi); outline-offset: 2px; }
+
+  /* ---------- Metin ---------- */
+  .icerik { min-width: 0; max-width: 44rem; }
+  .bolum { padding-top: 2.5rem; }
+  .bolum:first-child { padding-top: 0.5rem; }
+  .bolum h2 {
+    font-size: 1.32rem;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.85rem;
+    font-weight: 700;
+  }
+  .bolum h3 {
+    font-size: 1rem;
+    margin: 1.6rem 0 0.5rem;
+    font-weight: 650;
+  }
+  .bolum p { margin: 0 0 0.9rem; color: var(--metin-orta); }
+  .bolum ul { margin: 0 0 0.9rem; padding-left: 1.15rem; color: var(--metin-orta); }
+  .bolum li { margin-bottom: 0.45rem; }
+  .bolum strong { color: var(--metin); font-weight: 650; }
+  .bolum a { color: var(--mavi); }
+
+  /* ---------- Izin tablosu ---------- */
+  .tablo-sarma {
+    overflow-x: auto;
+    border: 1px solid var(--cizgi);
+    border-radius: var(--yuvar);
+    margin: 1.25rem 0 1.5rem;
+    background: var(--kart);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 34rem; }
+  thead th {
+    background: var(--kart-ust);
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    font-weight: 650;
+    font-size: 0.8rem;
+    color: var(--metin-orta);
+    border-bottom: 1px solid var(--cizgi);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--cizgi);
+    color: var(--metin-orta);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { color: var(--metin); font-weight: 600; white-space: nowrap; }
+  .rozet {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 650;
+    padding: 0.12rem 0.5rem;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .rozet-cihaz { background: var(--yesil-zemin); color: var(--yesil); }
+  .rozet-net   { background: var(--amber-zemin); color: var(--amber); }
+
+  /* ---------- Vurgu kutusu ---------- */
+  .kutu {
+    border: 1px solid var(--cizgi);
+    border-left: 3px solid var(--mavi);
+    background: var(--mavi-zemin);
+    border-radius: var(--yuvar);
+    padding: 1rem 1.1rem;
+    margin: 1.25rem 0;
+  }
+  .kutu p:last-child { margin-bottom: 0; }
+  .kutu p { color: var(--metin-orta); font-size: 0.93rem; }
+
+  /* ---------- Iletisim ---------- */
+  .iletisim {
+    margin-top: 1rem;
+    border: 1px solid var(--cizgi);
+    border-radius: var(--yuvar);
+    background: var(--kart);
+    padding: 1.2rem 1.3rem;
+  }
+  .iletisim p { margin: 0 0 0.4rem; }
+  .iletisim p:last-child { margin: 0; }
+
+  footer {
+    grid-column: 1 / -1;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--cizgi);
+    color: var(--metin-soluk);
+    font-size: 0.83rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+  }
+
+  [data-dil] { display: none; }
+  html[lang="tr"] [data-dil="tr"] { display: revert; }
+  html[lang="en"] [data-dil="en"] { display: revert; }
+</style>
+</head>
+
+<body>
+
+<header class="ust">
+  <div class="ust-ic">
+    <div class="marka">
+      <span class="marka-simge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2L8 5h8l1.5 2h2A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/>
+          <circle cx="12" cy="12.5" r="3.2"/>
+        </svg>
+      </span>
+      <span class="marka-ad">
+        SAM
+        <span class="marka-alt">GPS Map Camera</span>
+      </span>
+    </div>
+
+    <div class="dugmeler">
+      <button class="dugme" id="dilDugmesi" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18"/>
+        </svg>
+        <span id="dilEtiketi">English</span>
+      </button>
+
+      <button class="dugme" id="temaDugmesi" type="button">
+        <svg id="temaSimge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+        <span data-dil="tr">Gece</span>
+        <span data-dil="en">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="sayfa">
+
+  <!-- ===== KAPAK ===== -->
+  <section class="kapak">
+    <div data-dil="tr">
+      <h1>Gizlilik Politikası</h1>
+      <p>SAM GPS Map Camera, fotoğraf ve videolarınıza konum damgası basan bir saha belgeleme
+         uygulamasıdır. Bu sayfa hangi izinleri neden istediğimizi ve verilerinizin nerede
+         kaldığını anlatır.</p>
+      <span class="tarih">Yürürlük tarihi: 19 Eylül 2026</span>
+    </div>
+    <div data-dil="en">
+      <h1>Privacy Policy</h1>
+      <p>SAM GPS Map Camera is a field documentation app that stamps your photos and videos
+         with location data. This page explains which permissions we ask for, why, and where
+         your data stays.</p>
+      <span class="tarih">Effective date: 19 September 2026</span>
+    </div>
+
+    <div class="ozet">
+      <div class="ozet-kart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+        <span>
+          <b data-dil="tr">Hesap yok</b>
+          <b data-dil="en">No account</b>
+          <span data-dil="tr">Kayıt olmanız gerekmez, kimliğinizi sormayız.</span>
+          <span data-dil="en">No sign-up, we never ask who you are.</span>
+        </span>
+      </div>
+      <div class="ozet-kart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+        <span>
+          <b data-dil="tr">Sunucumuz yok</b>
+          <b data-dil="en">No servers</b>
+          <span data-dil="tr">Fotoğraflarınız hiçbir yere yüklenmez.</span>
+          <span data-dil="en">Your photos are never uploaded anywhere.</span>
+        </span>
+      </div>
+      <div class="ozet-kart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+        <span>
+          <b data-dil="tr">Reklam ve izleme yok</b>
+          <b data-dil="en">No ads or tracking</b>
+          <span data-dil="tr">Analitik araç veya reklam ağı kullanmayız.</span>
+          <span data-dil="en">No analytics tools, no ad networks.</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ICINDEKILER ===== -->
+  <nav class="icindekiler" aria-label="İçindekiler">
+    <h2 data-dil="tr">Bu sayfada</h2>
+    <h2 data-dil="en">On this page</h2>
+    <ol>
+      <li><a href="#kisaca"><span data-dil="tr">Kısaca</span><span data-dil="en">In short</span></a></li>
+      <li><a href="#izinler"><span data-dil="tr">İzinler ve kullanım</span><span data-dil="en">Permissions and use</span></a></li>
+      <li><a href="#nerede"><span data-dil="tr">Verileriniz nerede</span><span data-dil="en">Where your data lives</span></a></li>
+      <li><a href="#internet"><span data-dil="tr">İnternet kullanımı</span><span data-dil="en">Internet use</span></a></li>
+      <li><a href="#ucuncu"><span data-dil="tr">Üçüncü taraf servisler</span><span data-dil="en">Third-party services</span></a></li>
+      <li><a href="#paylasim"><span data-dil="tr">Paylaşım</span><span data-dil="en">Sharing</span></a></li>
+      <li><a href="#saklama"><span data-dil="tr">Saklama ve silme</span><span data-dil="en">Retention and deletion</span></a></li>
+      <li><a href="#cocuklar"><span data-dil="tr">Çocuklar</span><span data-dil="en">Children</span></a></li>
+      <li><a href="#haklar"><span data-dil="tr">Haklarınız</span><span data-dil="en">Your rights</span></a></li>
+      <li><a href="#degisiklik"><span data-dil="tr">Değişiklikler</span><span data-dil="en">Changes</span></a></li>
+      <li><a href="#iletisim"><span data-dil="tr">İletişim</span><span data-dil="en">Contact</span></a></li>
+    </ol>
+  </nav>
+
+  <!-- ===== ICERIK ===== -->
+  <div class="icerik">
+
+    <section class="bolum" id="kisaca">
+      <div data-dil="tr">
+        <h2>Kısaca</h2>
+        <p>SAM GPS Map Camera tamamen cihazınızda çalışır. Çektiğiniz fotoğraf ve videolar
+           yalnızca sizin seçtiğiniz klasöre kaydedilir. Bizim bir sunucumuz yok, dolayısıyla
+           verilerinizi toplayacak, saklayacak ya da başkasına verecek bir yerimiz de yok.</p>
+        <p>Uygulamanın internete ihtiyaç duyduğu tek durum, koordinatları okunabilir bir adrese
+           çevirmektir. Bunun nasıl çalıştığını aşağıda ayrıntılı anlatıyoruz.</p>
+      </div>
+      <div data-dil="en">
+        <h2>In short</h2>
+        <p>SAM GPS Map Camera runs entirely on your device. The photos and videos you take are
+           saved only to the folder you choose. We have no servers, so there is nowhere for us
+           to collect, store or pass on your data.</p>
+        <p>The only time the app needs the internet is to turn coordinates into a readable
+           address. We explain exactly how that works below.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="izinler">
+      <div data-dil="tr">
+        <h2>İzinler ve kullanım</h2>
+        <p>Uygulama yalnızca çalışması için gereken izinleri ister. Her izni ilk kullanıldığı
+           anda soruyoruz, açılışta hepsini birden istemiyoruz. İzin vermezseniz yalnızca o
+           özellik devre dışı kalır, uygulamanın geri kalanı çalışmaya devam eder.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Permissions and use</h2>
+        <p>The app only requests the permissions it needs to function. Each one is asked for
+           when the related feature is first used, not all at once on launch. If you decline,
+           only that feature is disabled; the rest of the app keeps working.</p>
+      </div>
+
+      <div class="tablo-sarma">
+        <table data-dil="tr">
+          <thead>
+            <tr><th>İzin</th><th>Ne için</th><th>Veri nereye gider</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kamera</td>
+              <td>Fotoğraf ve video çekmek, barkod okumak</td>
+              <td><span class="rozet rozet-cihaz">Cihazda kalır</span></td>
+            </tr>
+            <tr>
+              <td>Konum</td>
+              <td>Damgaya koordinat, adres, rakım ve yön bilgisi eklemek</td>
+              <td><span class="rozet rozet-net">Adres çözümleme için Google'a gider</span></td>
+            </tr>
+            <tr>
+              <td>Mikrofon</td>
+              <td>Video kaydında ses almak</td>
+              <td><span class="rozet rozet-cihaz">Cihazda kalır</span></td>
+            </tr>
+            <tr>
+              <td>Klasör erişimi</td>
+              <td>Fotoğrafları seçtiğiniz klasöre kaydetmek ve galeride göstermek</td>
+              <td><span class="rozet rozet-cihaz">Cihazda kalır</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table data-dil="en">
+          <thead>
+            <tr><th>Permission</th><th>What for</th><th>Where the data goes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Camera</td>
+              <td>Taking photos and videos, scanning barcodes</td>
+              <td><span class="rozet rozet-cihaz">Stays on device</span></td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td>Adding coordinates, address, altitude and heading to the stamp</td>
+              <td><span class="rozet rozet-net">Sent to Google for address lookup</span></td>
+            </tr>
+            <tr>
+              <td>Microphone</td>
+              <td>Recording audio with video</td>
+              <td><span class="rozet rozet-cihaz">Stays on device</span></td>
+            </tr>
+            <tr>
+              <td>Folder access</td>
+              <td>Saving photos to your chosen folder and showing them in the gallery</td>
+              <td><span class="rozet rozet-cihaz">Stays on device</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-dil="tr">
+        <p>Konum izni yalnızca uygulama açıkken kullanılır. Arka planda konumunuzu takip etmiyoruz.
+           Konum bilgisinin damgada görünüp görünmeyeceğini, hangi alanların gösterileceğini
+           uygulama ayarlarından siz belirlersiniz.</p>
+      </div>
+      <div data-dil="en">
+        <p>Location is used only while the app is open. We do not track your location in the
+           background. You decide in the app settings whether location appears on the stamp and
+           which fields are shown.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="nerede">
+      <div data-dil="tr">
+        <h2>Verileriniz nerede</h2>
+        <p>İlk açılışta sizden bir klasör seçmenizi istiyoruz. Çekilen her fotoğraf, video ve
+           oluşturulan her PDF raporu yalnızca o klasöre yazılır. Bu klasör sizin cihazınızda,
+           sizin kontrolünüzdedir.</p>
+        <p>Uygulama ayarlarınız (dil, tema, seçili şablon, renk tercihleri, not metni) cihazın
+           yerel deposunda tutulur. Uygulamayı kaldırdığınızda bu ayarlar silinir; fotoğraflarınız
+           seçtiğiniz klasörde kalmaya devam eder.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Where your data lives</h2>
+        <p>On first launch we ask you to choose a folder. Every photo, video and PDF report the
+           app creates is written only to that folder. It is on your device, under your control.</p>
+        <p>Your app settings (language, theme, selected template, colour preferences, note text)
+           are kept in local storage on the device. Uninstalling the app removes these settings;
+           your photos remain in the folder you chose.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="internet">
+      <div data-dil="tr">
+        <h2>İnternet kullanımı</h2>
+        <p>Uygulama tek bir amaç için internete bağlanır: <strong>ters jeokodlama</strong>. Bu,
+           GPS'ten gelen enlem ve boylam değerlerinin sokak adına, mahalleye, ilçeye ve il adına
+           çevrilmesi işlemidir.</p>
+
+        <div class="kutu">
+          <p>Bu işlem sırasında <strong>yalnızca koordinatlarınız</strong> Android'in konum
+             servisine (Google Play Services) gönderilir. Fotoğraflarınız, notlarınız veya
+             kimliğinizle ilgili hiçbir bilgi gönderilmez.</p>
+        </div>
+
+        <p>İnternet bağlantınız yoksa uygulama çalışmaya devam eder. Bu durumda damgada adres
+           yerine yalnızca koordinatlar görünür.</p>
+        <p>Adres bilgisinin damgada görünmesini istemiyorsanız, damgasız bir şablon seçebilir ya
+           da cihaz ayarlarından uygulamanın konum iznini kaldırabilirsiniz.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Internet use</h2>
+        <p>The app connects to the internet for one purpose: <strong>reverse geocoding</strong>.
+           This turns the latitude and longitude from GPS into a street name, district and city.</p>
+
+        <div class="kutu">
+          <p>During this lookup <strong>only your coordinates</strong> are sent to Android's
+             location service (Google Play Services). No photos, notes or identifying information
+             are sent.</p>
+        </div>
+
+        <p>The app keeps working without an internet connection. In that case the stamp shows
+           coordinates instead of an address.</p>
+        <p>If you would rather not show address data at all, choose a template without it or
+           revoke the location permission in your device settings.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="ucuncu">
+      <div data-dil="tr">
+        <h2>Üçüncü taraf servisler</h2>
+        <h3>Google Play Services — Konum</h3>
+        <p>Konum belirleme ve adres çözümleme için Android'in yerleşik konum servisini kullanıyoruz.
+           Bu servis Google tarafından sağlanır ve kendi gizlilik politikasına tabidir.</p>
+
+        <h3>Google ML Kit — Barkod tarama</h3>
+        <p>Barkod ve QR kod okuma tamamen cihaz üzerinde çalışır. Taranan görüntü veya kod
+           içeriği hiçbir yere gönderilmez.</p>
+
+        <div class="kutu">
+          <p>Uygulamada reklam ağı, analitik aracı, çökme raporlama servisi veya kullanıcı
+             davranışı izleyen başka bir bileşen bulunmaz.</p>
+        </div>
+      </div>
+      <div data-dil="en">
+        <h2>Third-party services</h2>
+        <h3>Google Play Services — Location</h3>
+        <p>We use Android's built-in location service for positioning and address lookup. This
+           service is provided by Google and subject to its own privacy policy.</p>
+
+        <h3>Google ML Kit — Barcode scanning</h3>
+        <p>Barcode and QR scanning runs entirely on the device. Neither the camera frame nor the
+           decoded content is sent anywhere.</p>
+
+        <div class="kutu">
+          <p>The app contains no ad networks, analytics tools, crash reporting services or any
+             other component that tracks user behaviour.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bolum" id="paylasim">
+      <div data-dil="tr">
+        <h2>Paylaşım</h2>
+        <p>Fotoğraflarınızı, ZIP arşivlerinizi ve PDF raporlarınızı yalnızca siz paylaşabilirsiniz.
+           Paylaş düğmesine bastığınızda Android'in kendi paylaşım penceresi açılır ve dosyayı
+           hangi uygulamaya göndereceğinizi siz seçersiniz.</p>
+        <p>Dosya bir kez başka uygulamaya gönderildikten sonra artık o uygulamanın gizlilik
+           koşullarına tabidir. Bu aşamadan sonrası bizim kontrolümüzde değildir.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Sharing</h2>
+        <p>Only you can share your photos, ZIP archives and PDF reports. Tapping the share button
+           opens Android's own share sheet, where you choose which app receives the file.</p>
+        <p>Once a file is handed to another app, it falls under that app's privacy terms. What
+           happens after that point is outside our control.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="saklama">
+      <div data-dil="tr">
+        <h2>Saklama ve silme</h2>
+        <p>Bizde saklanan hiçbir veriniz olmadığı için silmemiz gereken bir şey de yoktur.
+           Fotoğraflarınız cihazınızdaki klasörde durur; galeriden veya dosya yöneticisinden
+           istediğiniz zaman silebilirsiniz.</p>
+        <p>Uygulama içinde oluşturulan geçici dosyalar (paylaşım için hazırlanan kopyalar,
+           işlenmekte olan görseller) işlem bitiminde otomatik temizlenir.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Retention and deletion</h2>
+        <p>Since we hold none of your data, there is nothing for us to delete. Your photos stay
+           in the folder on your device and you can remove them at any time from the gallery or
+           your file manager.</p>
+        <p>Temporary files the app creates (copies prepared for sharing, images being processed)
+           are cleaned up automatically once the operation finishes.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="cocuklar">
+      <div data-dil="tr">
+        <h2>Çocuklar</h2>
+        <p>Uygulama profesyonel saha kullanımı için tasarlanmıştır ve çocuklara yönelik değildir.
+           Çocuklardan bilerek herhangi bir veri toplamayız; zaten hiç kimseden veri toplamıyoruz.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Children</h2>
+        <p>The app is built for professional field use and is not directed at children. We do not
+           knowingly collect data from children, and in fact we collect no data from anyone.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="haklar">
+      <div data-dil="tr">
+        <h2>Haklarınız</h2>
+        <p>KVKK ve GDPR kapsamındaki haklar, kişisel verilerinizi işleyen taraflara karşı
+           kullanılır. Biz herhangi bir kişisel veri işlemediğimiz, toplamadığımız veya
+           saklamadığımız için erişim, düzeltme, silme ve taşınabilirlik talepleri bize
+           yöneltilecek bir konu oluşturmaz.</p>
+        <p>Cihazınızdaki verilere zaten tam erişiminiz vardır. İzinleri istediğiniz an cihaz
+           ayarlarından geri alabilirsiniz.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Your rights</h2>
+        <p>Rights under GDPR and similar laws apply to parties that process your personal data.
+           Because we do not process, collect or store any personal data, requests for access,
+           correction, erasure or portability have no subject matter with us.</p>
+        <p>You already have full access to the data on your device, and you can revoke any
+           permission at any time from your device settings.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="degisiklik">
+      <div data-dil="tr">
+        <h2>Değişiklikler</h2>
+        <p>Bu politikayı uygulamaya yeni bir özellik eklendiğinde güncelleyebiliriz. Önemli bir
+           değişiklik olursa yürürlük tarihini yeniler ve uygulama içinde bildiririz.</p>
+      </div>
+      <div data-dil="en">
+        <h2>Changes</h2>
+        <p>We may update this policy when new features are added to the app. If a change is
+           significant, we will update the effective date and notify you inside the app.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="iletisim">
+      <div data-dil="tr">
+        <h2>İletişim</h2>
+        <p>Gizlilikle ilgili soru ya da talepleriniz için bize yazabilirsiniz.</p>
+        <div class="iletisim">
+          <p><strong>Uygulama:</strong> SAM — GPS Map Camera</p>
+          <p><strong>E-posta:</strong> <a href="mailto:rkckglu@gmail.com">rkckglu@gmail.com</a></p>
+        </div>
+      </div>
+      <div data-dil="en">
+        <h2>Contact</h2>
+        <p>Write to us with any privacy questions or requests.</p>
+        <div class="iletisim">
+          <p><strong>App:</strong> SAM — GPS Map Camera</p>
+          <p><strong>Email:</strong> <a href="mailto:rkckglu@gmail.com">rkckglu@gmail.com</a></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span data-dil="tr">SAM GPS Map Camera · Gizlilik Politikası</span>
+    <span data-dil="en">SAM GPS Map Camera · Privacy Policy</span>
+    <span data-dil="tr">Son güncelleme: 19 Eylül 2026</span>
+    <span data-dil="en">Last updated: 19 September 2026</span>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var kok = document.documentElement;
+  var dilDugmesi = document.getElementById('dilDugmesi');
+  var dilEtiketi = document.getElementById('dilEtiketi');
+  var temaDugmesi = document.getElementById('temaDugmesi');
+  var temaSimge = document.getElementById('temaSimge');
+
+  var AY = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  var GUNES = '<circle cx="12" cy="12" r="4"/>'
+    + '<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4'
+    + 'M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+
+  /** Tarayici deposu ozel modda erisilemeyebilir; sessizce gec. */
+  function oku(anahtar) {
+    try { return localStorage.getItem(anahtar); } catch (e) { return null; }
+  }
+  function yaz(anahtar, deger) {
+    try { localStorage.setItem(anahtar, deger); } catch (e) { /* yok say */ }
+  }
+
+  function dilUygula(dil) {
+    kok.setAttribute('lang', dil);
+    document.title = dil === 'tr'
+      ? 'SAM GPS Map Camera — Gizlilik Politikası'
+      : 'SAM GPS Map Camera — Privacy Policy';
+    // Dugme karsi dili gosterir: Turkce sayfadayken "English" yazar.
+    dilEtiketi.textContent = dil === 'tr' ? 'English' : 'Türkçe';
+  }
+
+  function temaUygula(tema) {
+    kok.setAttribute('data-tema', tema);
+    temaSimge.innerHTML = tema === 'koyu' ? GUNES : AY;
+    var etiketler = temaDugmesi.querySelectorAll('[data-dil]');
+    for (var i = 0; i < etiketler.length; i++) {
+      var d = etiketler[i].getAttribute('data-dil');
+      etiketler[i].textContent = tema === 'koyu'
+        ? (d === 'tr' ? 'Gündüz' : 'Light')
+        : (d === 'tr' ? 'Gece' : 'Dark');
+    }
+  }
+
+  // Baslangic: kayitli tercih, yoksa tarayici diline ve sistem temasina bak.
+  var kayitliDil = oku('sam.dil');
+  var baslangicDil = kayitliDil
+    || ((navigator.language || 'en').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en');
+  dilUygula(baslangicDil);
+
+  var kayitliTema = oku('sam.tema');
+  var karanlikMi = window.matchMedia
+    && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  temaUygula(kayitliTema || (karanlikMi ? 'koyu' : 'acik'));
+
+  dilDugmesi.addEventListener('click', function () {
+    var yeni = kok.getAttribute('lang') === 'tr' ? 'en' : 'tr';
+    dilUygula(yeni);
+    yaz('sam.dil', yeni);
+  });
+
+  temaDugmesi.addEventListener('click', function () {
+    var yeni = kok.getAttribute('data-tema') === 'koyu' ? 'acik' : 'koyu';
+    temaUygula(yeni);
+    yaz('sam.tema', yeni);
+  });
+
+  // Icindekiler: goruntulenen bolumu isaretle.
+  var baglar = document.querySelectorAll('.icindekiler a');
+  var bolumler = document.querySelectorAll('.bolum');
+
+  if ('IntersectionObserver' in window) {
+    var gozlemci = new IntersectionObserver(function (girisler) {
+      girisler.forEach(function (giris) {
+        if (!giris.isIntersecting) return;
+        var kimlik = giris.target.id;
+        for (var i = 0; i < baglar.length; i++) {
+          var hedefMi = baglar[i].getAttribute('href') === '#' + kimlik;
+          baglar[i].classList.toggle('etkin', hedefMi);
+        }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+
+    for (var i = 0; i < bolumler.length; i++) gozlemci.observe(bolumler[i]);
+  }
+})();
+</script>
+
+</body>
+</html>
