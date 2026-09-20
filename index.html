@@ -418,10 +418,10 @@
           <path d="M20 6 9 17l-5-5"/>
         </svg>
         <span>
-          <b data-dil="tr">Sunucumuz yok</b>
-          <b data-dil="en">No servers</b>
-          <span data-dil="tr">Fotoğraflarınız hiçbir yere yüklenmez.</span>
-          <span data-dil="en">Your photos are never uploaded anywhere.</span>
+          <b data-dil="tr">Fotoğraflarınız bizde durmaz</b>
+          <b data-dil="en">Your photos stay yours</b>
+          <span data-dil="tr">Sunucumuz yok; çektikleriniz cihazınızda kalır.</span>
+          <span data-dil="en">We have no servers; what you shoot stays on your device.</span>
         </span>
       </div>
       <div class="ozet-kart">
@@ -430,10 +430,10 @@
           <path d="M20 6 9 17l-5-5"/>
         </svg>
         <span>
-          <b data-dil="tr">Reklam ve izleme yok</b>
-          <b data-dil="en">No ads or tracking</b>
-          <span data-dil="tr">Analitik araç veya reklam ağı kullanmayız.</span>
-          <span data-dil="en">No analytics tools, no ad networks.</span>
+          <b data-dil="tr">Reklamlar kaldırılabilir</b>
+          <b data-dil="en">Ads can be removed</b>
+          <span data-dil="tr">Tek seferlik ödemeyle reklamsız sürüme geçilir.</span>
+          <span data-dil="en">A single purchase switches to the ad-free version.</span>
         </span>
       </div>
     </div>
@@ -448,6 +448,8 @@
       <li><a href="#izinler"><span data-dil="tr">İzinler ve kullanım</span><span data-dil="en">Permissions and use</span></a></li>
       <li><a href="#nerede"><span data-dil="tr">Verileriniz nerede</span><span data-dil="en">Where your data lives</span></a></li>
       <li><a href="#internet"><span data-dil="tr">İnternet kullanımı</span><span data-dil="en">Internet use</span></a></li>
+      <li><a href="#reklam"><span data-dil="tr">Reklamlar</span><span data-dil="en">Advertising</span></a></li>
+      <li><a href="#satinalma"><span data-dil="tr">Satın alma</span><span data-dil="en">Purchases</span></a></li>
       <li><a href="#ucuncu"><span data-dil="tr">Üçüncü taraf servisler</span><span data-dil="en">Third-party services</span></a></li>
       <li><a href="#paylasim"><span data-dil="tr">Paylaşım</span><span data-dil="en">Sharing</span></a></li>
       <li><a href="#saklama"><span data-dil="tr">Saklama ve silme</span><span data-dil="en">Retention and deletion</span></a></li>
@@ -464,19 +466,26 @@
     <section class="bolum" id="kisaca">
       <div data-dil="tr">
         <h2>Kısaca</h2>
-        <p>SAM GPS Map Camera tamamen cihazınızda çalışır. Çektiğiniz fotoğraf ve videolar
-           yalnızca sizin seçtiğiniz klasöre kaydedilir. Bizim bir sunucumuz yok, dolayısıyla
-           verilerinizi toplayacak, saklayacak ya da başkasına verecek bir yerimiz de yok.</p>
-        <p>Uygulamanın internete ihtiyaç duyduğu tek durum, koordinatları okunabilir bir adrese
-           çevirmektir. Bunun nasıl çalıştığını aşağıda ayrıntılı anlatıyoruz.</p>
+        <p>SAM GPS Map Camera'nın çekim ve damgalama işlerinin tamamı cihazınızda yapılır.
+           Fotoğraf ve videolarınız yalnızca sizin seçtiğiniz klasöre kaydedilir. Bizim bir
+           sunucumuz yok; çektiklerinizi toplayacak, saklayacak ya da başkasına verecek bir
+           yerimiz de yok.</p>
+        <p>Uygulamanın ücretsiz sürümünde reklam gösterilir. Reklamları Google AdMob sağlar ve
+           AdMob kendi amaçları için bir miktar veri toplar. Bu, gizlilik açısından bilmeniz
+           gereken en önemli konu olduğu için ayrı bir başlıkta ayrıntılı anlatıyoruz.</p>
+        <p>Uygulamanın kendi işleyişi için internete ihtiyaç duyduğu tek durum, koordinatları
+           okunabilir bir adrese çevirmektir.</p>
       </div>
       <div data-dil="en">
         <h2>In short</h2>
-        <p>SAM GPS Map Camera runs entirely on your device. The photos and videos you take are
-           saved only to the folder you choose. We have no servers, so there is nowhere for us
-           to collect, store or pass on your data.</p>
-        <p>The only time the app needs the internet is to turn coordinates into a readable
-           address. We explain exactly how that works below.</p>
+        <p>All capture and stamping work in SAM GPS Map Camera happens on your device. Your
+           photos and videos are saved only to the folder you choose. We have no servers, so
+           there is nowhere for us to collect, store or pass on what you shoot.</p>
+        <p>The free version of the app shows advertising. Ads are served by Google AdMob, which
+           collects some data for its own purposes. Because this is the most important thing to
+           know about privacy here, we cover it in its own section below.</p>
+        <p>The only time the app itself needs the internet is to turn coordinates into a
+           readable address.</p>
       </div>
     </section>
 
@@ -520,6 +529,11 @@
               <td>Fotoğrafları seçtiğiniz klasöre kaydetmek ve galeride göstermek</td>
               <td><span class="rozet rozet-cihaz">Cihazda kalır</span></td>
             </tr>
+            <tr>
+              <td>Reklam kimliği</td>
+              <td>Ücretsiz sürümde reklam göstermek</td>
+              <td><span class="rozet rozet-net">Google AdMob'a gider</span></td>
+            </tr>
           </tbody>
         </table>
 
@@ -547,6 +561,11 @@
               <td>Folder access</td>
               <td>Saving photos to your chosen folder and showing them in the gallery</td>
               <td><span class="rozet rozet-cihaz">Stays on device</span></td>
+            </tr>
+            <tr>
+              <td>Advertising ID</td>
+              <td>Serving ads in the free version</td>
+              <td><span class="rozet rozet-net">Sent to Google AdMob</span></td>
             </tr>
           </tbody>
         </table>
@@ -620,6 +639,123 @@
       </div>
     </section>
 
+    <section class="bolum" id="reklam">
+      <div data-dil="tr">
+        <h2>Reklamlar</h2>
+        <p>Uygulamanın ücretsiz sürümünde <strong>Google AdMob</strong> üzerinden reklam
+           gösterilir. Reklamlar yalnızca galeri ve klasör ekranlarında, alt kısımda küçük bir
+           şerit olarak görünür. Kamera ekranında ve çekim sırasında reklam çıkmaz.</p>
+
+        <h3>AdMob hangi verileri toplar</h3>
+        <p>Reklam gösterebilmek için AdMob, cihazınızdan bir miktar veri alır. Bunlar bize
+           gelmez; doğrudan Google'a gider ve Google'ın gizlilik koşullarına tabidir:</p>
+        <ul>
+          <li><strong>Reklam kimliği:</strong> Cihazınıza atanmış, sıfırlanabilir bir numara.
+              Adınızla veya telefon numaranızla ilişkili değildir.</li>
+          <li><strong>Cihaz bilgisi:</strong> Model, işletim sistemi sürümü, ekran boyutu,
+              dil ayarı.</li>
+          <li><strong>Yaklaşık konum:</strong> IP adresinizden çıkarılan ülke ve şehir düzeyinde
+              konum. Bu, uygulamanın GPS verisinden farklıdır; AdMob'a GPS koordinatlarınızı
+              göndermeyiz.</li>
+          <li><strong>Reklam etkileşimi:</strong> Hangi reklamın gösterildiği ve tıklanıp
+              tıklanmadığı.</li>
+        </ul>
+
+        <div class="kutu">
+          <p>Fotoğraflarınız, konum damganız, notlarınız ve klasör adlarınız reklam sistemine
+             <strong>hiçbir şekilde gönderilmez</strong>. AdMob'un uygulamanızın içeriğine
+             erişimi yoktur.</p>
+        </div>
+
+        <h3>Reklam kimliğinizi kontrol etmek</h3>
+        <p>Android ayarlarından reklam kimliğinizi istediğiniz zaman sıfırlayabilir veya tamamen
+           silebilirsiniz. Yolu genellikle şöyledir: <strong>Ayarlar → Güvenlik ve gizlilik →
+           Diğer gizlilik ayarları → Reklamlar</strong>. Reklam kimliğini sildiğinizde uygulama
+           çalışmaya devam eder, yalnızca gösterilen reklamlar kişiselleştirilmemiş olur.</p>
+
+        <h3>Kişiselleştirilmiş reklamlar</h3>
+        <p>Avrupa Birliği, Birleşik Krallık ve İsviçre'deki kullanıcılara, uygulama ilk açıldığında
+           kişiselleştirilmiş reklamları kabul edip etmediğinizi soran bir onay ekranı gösterilir.
+           Bu tercihi daha sonra uygulama ayarlarından değiştirebilirsiniz.</p>
+      </div>
+
+      <div data-dil="en">
+        <h2>Advertising</h2>
+        <p>The free version of the app shows ads through <strong>Google AdMob</strong>. Ads appear
+           only on the gallery and folder screens, as a small banner at the bottom. No ads are
+           shown on the camera screen or while shooting.</p>
+
+        <h3>What AdMob collects</h3>
+        <p>To serve ads, AdMob takes some data from your device. This does not reach us; it goes
+           directly to Google and is subject to Google's privacy terms:</p>
+        <ul>
+          <li><strong>Advertising ID:</strong> A resettable number assigned to your device. It is
+              not tied to your name or phone number.</li>
+          <li><strong>Device information:</strong> Model, operating system version, screen size,
+              language setting.</li>
+          <li><strong>Approximate location:</strong> Country and city level, derived from your IP
+              address. This differs from the app's GPS data; we never send your GPS coordinates
+              to AdMob.</li>
+          <li><strong>Ad interaction:</strong> Which ad was shown and whether it was tapped.</li>
+        </ul>
+
+        <div class="kutu">
+          <p>Your photos, location stamps, notes and folder names are <strong>never sent</strong>
+             to the advertising system. AdMob has no access to your app content.</p>
+        </div>
+
+        <h3>Controlling your advertising ID</h3>
+        <p>You can reset or delete your advertising ID at any time in Android settings, usually
+           under <strong>Settings → Security and privacy → More privacy settings → Ads</strong>.
+           Deleting it does not stop the app from working; ads simply become
+           non-personalised.</p>
+
+        <h3>Personalised ads</h3>
+        <p>Users in the European Union, the United Kingdom and Switzerland see a consent screen on
+           first launch asking whether they accept personalised advertising. You can change this
+           choice later in the app settings.</p>
+      </div>
+    </section>
+
+    <section class="bolum" id="satinalma">
+      <div data-dil="tr">
+        <h2>Satın alma</h2>
+        <p>Reklamları kalıcı olarak kaldırmak için <strong>tek seferlik bir ödeme</strong>
+           yapabilirsiniz. Abonelik yoktur, yenileme yoktur, gizli ücret yoktur. Bir kez
+           ödediğinizde aynı Google hesabıyla giriş yaptığınız tüm cihazlarda geçerlidir.</p>
+
+        <h3>Ödeme nasıl işlenir</h3>
+        <p>Ödemeyi <strong>Google Play</strong> alır. Kart bilgileriniz Google Play tarafından
+           işlenir; biz kart numaranızı, banka bilgilerinizi veya fatura adresinizi görmeyiz ve
+           saklamayız.</p>
+        <p>Uygulama yalnızca satın almanın yapılıp yapılmadığını Google Play'den öğrenir. Bu bilgi
+           cihazınızda tutulur ve bizim sunucumuza gitmez.</p>
+
+        <h3>İade</h3>
+        <p>İade talepleri Google Play üzerinden yürütülür. Play Store uygulamasında
+           <strong>Menü → Ödemeler ve abonelikler → Bütçe ve geçmiş</strong> bölümünden talep
+           oluşturabilirsiniz.</p>
+      </div>
+
+      <div data-dil="en">
+        <h2>Purchases</h2>
+        <p>You can remove ads permanently with a <strong>one-time payment</strong>. There is no
+           subscription, no renewal and no hidden charge. Once paid, it applies to every device
+           where you sign in with the same Google account.</p>
+
+        <h3>How payment is handled</h3>
+        <p>Payment is taken by <strong>Google Play</strong>. Your card details are processed by
+           Google Play; we never see or store your card number, banking details or billing
+           address.</p>
+        <p>The app only learns from Google Play whether the purchase was made. That flag is kept
+           on your device and never reaches a server of ours.</p>
+
+        <h3>Refunds</h3>
+        <p>Refund requests go through Google Play. In the Play Store app you can request one under
+           <strong>Menu → Payments and subscriptions → Budget and history</strong>.</p>
+      </div>
+    </section>
+
     <section class="bolum" id="ucuncu">
       <div data-dil="tr">
         <h2>Üçüncü taraf servisler</h2>
@@ -631,9 +767,18 @@
         <p>Barkod ve QR kod okuma tamamen cihaz üzerinde çalışır. Taranan görüntü veya kod
            içeriği hiçbir yere gönderilmez.</p>
 
+        <h3>Google AdMob — Reklam</h3>
+        <p>Ücretsiz sürümde reklam gösterimi için kullanılır. Topladığı veriler ve nasıl
+           kontrol edebileceğiniz <a href="#reklam">Reklamlar</a> bölümünde anlatılmıştır.</p>
+
+        <h3>Google Play Faturalandırma — Satın alma</h3>
+        <p>Reklamsız sürüme geçiş ödemesini işler. Kart ve fatura bilgileriniz Google Play
+           tarafından yönetilir, bize ulaşmaz.</p>
+
         <div class="kutu">
-          <p>Uygulamada reklam ağı, analitik aracı, çökme raporlama servisi veya kullanıcı
-             davranışı izleyen başka bir bileşen bulunmaz.</p>
+          <p>Bunların dışında uygulamada analitik aracı, çökme raporlama servisi veya kullanıcı
+             davranışını izleyen başka bir bileşen bulunmaz. Reklamsız sürümü satın aldığınızda
+             AdMob tamamen devre dışı kalır.</p>
         </div>
       </div>
       <div data-dil="en">
@@ -646,9 +791,18 @@
         <p>Barcode and QR scanning runs entirely on the device. Neither the camera frame nor the
            decoded content is sent anywhere.</p>
 
+        <h3>Google AdMob — Advertising</h3>
+        <p>Used to serve ads in the free version. What it collects and how you can control it is
+           described in the <a href="#reklam">Advertising</a> section.</p>
+
+        <h3>Google Play Billing — Purchases</h3>
+        <p>Handles payment for the ad-free upgrade. Your card and billing details are managed by
+           Google Play and never reach us.</p>
+
         <div class="kutu">
-          <p>The app contains no ad networks, analytics tools, crash reporting services or any
-             other component that tracks user behaviour.</p>
+          <p>Beyond these, the app contains no analytics tools, crash reporting services or any
+             other component that tracks user behaviour. Buying the ad-free version disables
+             AdMob entirely.</p>
         </div>
       </div>
     </section>
@@ -694,12 +848,15 @@
       <div data-dil="tr">
         <h2>Çocuklar</h2>
         <p>Uygulama profesyonel saha kullanımı için tasarlanmıştır ve çocuklara yönelik değildir.
-           Çocuklardan bilerek herhangi bir veri toplamayız; zaten hiç kimseden veri toplamıyoruz.</p>
+           Google Play'de yaş sınırı bu doğrultuda belirlenmiştir. Çocuklardan bilerek veri
+           toplamayız; 13 yaşından küçük bir çocuğa ait veri toplandığını fark edersek gereğini
+           yaparız.</p>
       </div>
       <div data-dil="en">
         <h2>Children</h2>
-        <p>The app is built for professional field use and is not directed at children. We do not
-           knowingly collect data from children, and in fact we collect no data from anyone.</p>
+        <p>The app is built for professional field use and is not directed at children. Its Google
+           Play content rating reflects this. We do not knowingly collect data from children; if
+           we learn that data from a child under 13 has been collected, we will act on it.</p>
       </div>
     </section>
 
@@ -707,18 +864,32 @@
       <div data-dil="tr">
         <h2>Haklarınız</h2>
         <p>KVKK ve GDPR kapsamındaki haklar, kişisel verilerinizi işleyen taraflara karşı
-           kullanılır. Biz herhangi bir kişisel veri işlemediğimiz, toplamadığımız veya
-           saklamadığımız için erişim, düzeltme, silme ve taşınabilirlik talepleri bize
-           yöneltilecek bir konu oluşturmaz.</p>
-        <p>Cihazınızdaki verilere zaten tam erişiminiz vardır. İzinleri istediğiniz an cihaz
-           ayarlarından geri alabilirsiniz.</p>
+           kullanılır. Bizim kendi sunucumuzda tuttuğumuz hiçbir veri olmadığı için erişim,
+           düzeltme veya taşınabilirlik talepleri bize yöneltilecek bir konu oluşturmaz.</p>
+        <p>Reklam verileri Google tarafından işlenir. Bu veriler üzerindeki haklarınızı
+           kullanmak için Google'ın gizlilik araçlarına başvurmanız gerekir. En pratik yollar
+           şunlardır:</p>
+        <ul>
+          <li>Cihaz ayarlarından reklam kimliğinizi sıfırlamak veya silmek</li>
+          <li>Kişiselleştirilmiş reklam onayını uygulama ayarlarından geri almak</li>
+          <li>Reklamsız sürümü satın alarak AdMob'u tamamen devre dışı bırakmak</li>
+        </ul>
+        <p>Cihazınızdaki fotoğraflara zaten tam erişiminiz vardır ve uygulama izinlerini
+           istediğiniz an cihaz ayarlarından geri alabilirsiniz.</p>
       </div>
       <div data-dil="en">
         <h2>Your rights</h2>
         <p>Rights under GDPR and similar laws apply to parties that process your personal data.
-           Because we do not process, collect or store any personal data, requests for access,
-           correction, erasure or portability have no subject matter with us.</p>
-        <p>You already have full access to the data on your device, and you can revoke any
+           Because we hold no data on any server of ours, requests for access, correction or
+           portability have no subject matter with us.</p>
+        <p>Advertising data is processed by Google. To exercise your rights over that data you
+           need to use Google's privacy tools. The most practical options are:</p>
+        <ul>
+          <li>Reset or delete your advertising ID in device settings</li>
+          <li>Withdraw personalised-ads consent in the app settings</li>
+          <li>Buy the ad-free version to disable AdMob completely</li>
+        </ul>
+        <p>You already have full access to the photos on your device, and you can revoke any app
            permission at any time from your device settings.</p>
       </div>
     </section>
